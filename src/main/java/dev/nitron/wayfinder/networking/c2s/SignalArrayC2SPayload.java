@@ -49,15 +49,20 @@ public record SignalArrayC2SPayload(String name, Vector3f color, int type, Block
 
                 WayfinderWorldComponent comp = WayfinderComponents.WAYFINDER_W.get(context.player().getWorld());
 
+                WayfinderWorldComponent.SignalData signal = comp.getSignalPositions().stream()
+                        .filter(signalData -> signalData.pos.equals(signalArrayC2SPayload.pos))
+                        .findFirst()
+                        .orElse(null);
+
                 comp.updateSignal(
                         be.getPos(),
                         be.name,
                         be.color,
                         be.type,
-                        be.owner_uuid
+                        be.owner_uuid,
+                        signal.isPowered
                 );
             }
-
         }
     }
 }

@@ -18,5 +18,9 @@ public class WayfinderModelProvider {
         MODELS.add(Identifier.of(Wayfinder.MOD_ID, "item/signalscope_vantage_gui"));
         MODELS.add(Identifier.of(Wayfinder.MOD_ID, "item/signalscope_twisted"));
         MODELS.add(Identifier.of(Wayfinder.MOD_ID, "item/signalscope_twisted_gui"));
+        MODELS.add(Identifier.of(Wayfinder.MOD_ID, "item/wayfinders_compass_closed"));
+        MODELS.add(Identifier.of(Wayfinder.MOD_ID, "item/wayfinders_compass"));
+        MODELS.add(Identifier.of(Wayfinder.MOD_ID, "item/lifeform_analyzer"));
+        MODELS.add(Identifier.of(Wayfinder.MOD_ID, "item/lifeform_analyzer_gui"));
     }
 }

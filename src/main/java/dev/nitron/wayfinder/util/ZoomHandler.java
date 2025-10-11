@@ -29,16 +29,29 @@ public class ZoomHandler {
         return MathHelper.lerp(tickDelta, previousZoomProgress, currentZoomProgress);
     }
 
-    private static final double NORMAL_SENSITIVITY = MinecraftClient.getInstance().options.getMouseSensitivity().getValue();
+    private static Double cachedSensitivity = null;
 
     public static void updateSensitivity() {
         var options = MinecraftClient.getInstance().options;
-        if (MinecraftClient.getInstance().player.isUsingItem() && MinecraftClient.getInstance().player.getStackInHand(MinecraftClient.getInstance().player.getActiveHand()).getItem() instanceof SignalscopeItem
-        && MinecraftClient.getInstance().options.getPerspective().isFirstPerson()) {
-            options.getMouseSensitivity().setValue((double) (NORMAL_SENSITIVITY * 0.4));
+
+        boolean zooming = MinecraftClient.getInstance().player != null
+                && MinecraftClient.getInstance().player.isUsingItem()
+                && MinecraftClient.getInstance().player.getStackInHand(MinecraftClient.getInstance().player.getActiveHand()).getItem() instanceof SignalscopeItem
+                && options.getPerspective().isFirstPerson();
+
+        if (zooming) {
+            if (cachedSensitivity == null) {
+                cachedSensitivity = options.getMouseSensitivity().getValue();
+            }
+            options.getMouseSensitivity().setValue(cachedSensitivity * 0.4);
         } else {
-            options.getMouseSensitivity().setValue((double) NORMAL_SENSITIVITY);
+            if (cachedSensitivity != null) {
+                options.getMouseSensitivity().setValue(cachedSensitivity);
+                cachedSensitivity = null;
+            }
         }
     }
+
+
 }
 

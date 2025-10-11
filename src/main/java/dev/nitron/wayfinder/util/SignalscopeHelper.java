@@ -48,6 +48,7 @@ public class SignalscopeHelper {
             double distance = targetVec.length();
 
             if (distance > maxDistance) continue;
+            if (signalData.isPowered && !player.getUuidAsString().equals(signalData.ownerUUID)) continue;
             if (privacy && !player.getUuidAsString().equals(signalData.ownerUUID)) continue;
             if (vantage && player.getUuidAsString().equals(signalData.ownerUUID)) continue;
             if (twisted &&  !signalData.ownerUUID.equals("beacon")) continue;

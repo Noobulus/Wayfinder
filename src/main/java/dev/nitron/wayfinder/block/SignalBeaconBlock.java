@@ -54,7 +54,8 @@ public class SignalBeaconBlock extends Block {
                     "???",
                     new Vec3i(170, 91, 249),
                     4,
-                    "beacon"
+                    "beacon",
+                    false
             ));
         }
     }
@@ -75,7 +76,8 @@ public class SignalBeaconBlock extends Block {
                     "???",
                     new Vec3i(170, 91, 249),
                     4,
-                    "beacon"
+                    "beacon",
+                    false
             ));
         }
     }
@@ -105,7 +107,8 @@ public class SignalBeaconBlock extends Block {
                     "???",
                     new Vec3i(170, 91, 249),
                     4,
-                    "beacon"
+                    "beacon",
+                    false
             ));
         }
     }

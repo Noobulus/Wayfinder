@@ -7,6 +7,7 @@ import dev.nitron.wayfinder.item.tooltip.SignalscopeTooltipComponent;
 import dev.nitron.wayfinder.item.tooltip.SignalscopeTooltipData;
 import dev.nitron.wayfinder.registries.WayfinderBlocks;
 import dev.nitron.wayfinder.registries.WayfinderComponents;
+import dev.nitron.wayfinder.registries.WayfinderModelPredicates;
 import dev.nitron.wayfinder.registries.WayfinderModelProvider;
 import dev.nitron.wayfinder.util.SignalscopeHelper;
 import dev.nitron.wayfinder.util.ZoomHandler;
@@ -41,6 +42,8 @@ public class WayfinderClient implements ClientModInitializer {
                 ZoomHandler.tick();
             }
         });
+
+        WayfinderModelPredicates.init();
 
         HudRenderCallback.EVENT.register(new SignalscopeHud());
 

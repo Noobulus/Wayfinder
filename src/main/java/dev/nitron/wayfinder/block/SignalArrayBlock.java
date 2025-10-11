@@ -70,7 +70,8 @@ public class SignalArrayBlock extends BlockWithEntity {
                         be.name,
                         be.color,
                         be.type,
-                        be.owner_uuid
+                        be.owner_uuid,
+                        world.isReceivingRedstonePower(pos)
                 ));
             }
         }
@@ -88,18 +89,20 @@ public class SignalArrayBlock extends BlockWithEntity {
 
     @Override
     protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
-        if (world.isReceivingRedstonePower(pos)){
-            WayfinderWorldComponent component = WayfinderComponents.WAYFINDER_W.get(world);
-            WayfinderWorldComponent.SignalData signal = component.getSignalPositions().stream()
-                    .filter(signalData -> signalData.pos.equals(pos))
-                    .findFirst()
-                    .orElse(null);
+        WayfinderWorldComponent component = WayfinderComponents.WAYFINDER_W.get(world);
+        WayfinderWorldComponent.SignalData signal = component.getSignalPositions().stream()
+                .filter(signalData -> signalData.pos.equals(pos))
+                .findFirst()
+                .orElse(null);
+
+        component.updateSignal(pos, signal.name, signal.color, signal.type, signal.ownerUUID, world.isReceivingRedstonePower(pos));
+
+        if (world.isReceivingRedstonePower(pos) && signal != null){
             PlayerEntity player = world.getPlayerByUuid(UUID.fromString(signal.ownerUUID));
             if (player != null){
                 Wayfinder.grantAdvancement(player, Identifier.of(Wayfinder.MOD_ID, "personal_vpn"), "incode");
             }
         }
-        world.setBlockState(pos, state.with(POWERED, world.isReceivingRedstonePower(pos)));
     }
 
     @Override

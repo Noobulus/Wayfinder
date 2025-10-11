@@ -2,7 +2,9 @@ package dev.nitron.wayfinder.registries;
 
 import dev.nitron.wayfinder.Wayfinder;
 import dev.nitron.wayfinder.item.LensItem;
+import dev.nitron.wayfinder.item.LifeformAnalyzerItem;
 import dev.nitron.wayfinder.item.SignalscopeItem;
+import dev.nitron.wayfinder.item.WayfindersCompass;
 import dev.nitron.wayfinder.item.component.SignalscopeComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,6 +21,12 @@ public class WayfinderItems {
     public static final Item PRIVACY_LENS = register("privacy_lens", new LensItem(new Item.Settings().maxCount(1)));
     public static final Item VANTAGE_LENS = register("vantage_lens", new LensItem(new Item.Settings().maxCount(1)));
     public static final Item TWISTED_LENS = register("twisted_lens", new LensItem(new Item.Settings().maxCount(1)));
+
+
+    public static final Item WAYFINDERS_COMPASS = register("wayfinders_compass", new WayfindersCompass(new Item.Settings().maxCount(1)));
+
+
+    public static final Item LIFEFORM_ANALYZER = register("lifeform_analyzer", new LifeformAnalyzerItem(new Item.Settings().maxCount(1)));
 
     public static Item register(String name, Item item){
         return Registry.register(Registries.ITEM, Identifier.of(Wayfinder.MOD_ID, name), item);

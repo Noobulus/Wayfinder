@@ -5,7 +5,6 @@ import dev.nitron.wayfinder.Wayfinder;
 import dev.nitron.wayfinder.item.component.SignalscopeComponent;
 import dev.nitron.wayfinder.item.tooltip.SignalscopeTooltipData;
 import dev.nitron.wayfinder.registries.WayfinderDataComponents;
-import dev.nitron.wayfinder.registries.WayfinderItems;
 import dev.nitron.wayfinder.registries.WayfinderSounds;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

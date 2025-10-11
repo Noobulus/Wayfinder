@@ -100,7 +100,7 @@ public class WayfinderEntityComponent implements AutoSyncedComponent, CommonTick
                 }
 
                 if (signalArrayBlockEntity != null) {
-                    boolean powered = player.getWorld().getBlockState(pos).get(SignalArrayBlock.POWERED);
+                    boolean powered = signalData.isPowered;
                     if (powered && !player.getUuidAsString().equals(signalArrayBlockEntity.owner_uuid)) {
                         continue;
                     }

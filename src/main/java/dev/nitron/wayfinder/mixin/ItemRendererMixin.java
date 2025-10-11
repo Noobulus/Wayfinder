@@ -1,7 +1,9 @@
 package dev.nitron.wayfinder.mixin;
 
 import dev.nitron.wayfinder.Wayfinder;
+import dev.nitron.wayfinder.item.LifeformAnalyzerItem;
 import dev.nitron.wayfinder.item.SignalscopeItem;
+import dev.nitron.wayfinder.item.WayfindersCompass;
 import dev.nitron.wayfinder.registries.WayfinderDataComponents;
 import dev.nitron.wayfinder.registries.WayfinderItems;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -34,6 +36,12 @@ public class ItemRendererMixin {
 
     @ModifyVariable(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformationMode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At("HEAD"), argsOnly = true)
     private BakedModel renderItem(BakedModel model, ItemStack stack, ModelTransformationMode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel modelAgain) {
+        if (stack.getItem() instanceof WayfindersCompass){
+            Identifier closedModelId = Identifier.of(Wayfinder.MOD_ID, "item/wayfinders_compass_closed");
+
+            return !stack.get(WayfinderDataComponents.WAYFINDERS_COMPASS_COMPONENT_COMPONENT_TYPE).open() ? models.getModelManager().getModel(closedModelId) : model;
+        }
+
         if (stack.getItem() instanceof SignalscopeItem){
             if(stack.get(WayfinderDataComponents.SIGNALSCOPE_COMPONENT_COMPONENT_TYPE).item().isOf(WayfinderItems.PRIVACY_LENS)){
                 Identifier modelId = Identifier.of(Wayfinder.MOD_ID, "item/signalscope_privacy");
@@ -61,6 +69,14 @@ public class ItemRendererMixin {
 
             return models.getModelManager().getModel(MODES.contains(renderMode) ? guiModelId : modelId);
         }
+
+        if (stack.getItem() instanceof LifeformAnalyzerItem){
+            Identifier modelId = Identifier.of(Wayfinder.MOD_ID, "item/lifeform_analyzer");
+            Identifier guiModelId = Identifier.of(Wayfinder.MOD_ID, "item/lifeform_analyzer_gui");
+
+            return models.getModelManager().getModel(MODES.contains(renderMode) ? guiModelId : modelId);
+        }
+
         return model;
     }
 }

@@ -68,7 +68,7 @@ public class SignalscopeHud implements HudRenderCallback {
         for (WayfinderWorldComponent.SignalData signals : comp.getSignalPositions()) {
             BlockPos signalPos = signals.pos;
 
-            if (client.world.getBlockState(signalPos).contains(SignalArrayBlock.POWERED) && client.world.getBlockState(signalPos).get(SignalArrayBlock.POWERED) && !client.player.getUuidAsString().equals(signals.ownerUUID)) continue;
+            if (signals.isPowered && !client.player.getUuidAsString().equals(signals.ownerUUID)) continue;
 
             if (privacy && !client.player.getUuidAsString().equals(signals.ownerUUID)) continue;
             if (vantage && client.player.getUuidAsString().equals(signals.ownerUUID)) continue;
@@ -157,13 +157,11 @@ public class SignalscopeHud implements HudRenderCallback {
 
 
         if (signal != null){
-            BlockState blockState = client.world.getBlockState(signal.pos);
-
             double distance = client.player.getPos().distanceTo(Vec3d.ofCenter(signal.pos));
             Text text = Text.literal("Signal: " + String.format("%.0f", distance) + "m").formatted(Formatting.BOLD);
             int color = 0xFF4cff99;
 
-            if (blockState.contains(SignalArrayBlock.POWERED) && client.world.getBlockState(lookedAtSignal).get(SignalArrayBlock.POWERED) && !client.player.getUuidAsString().equals(signal.ownerUUID)) return;
+            if (signal.isPowered && !client.player.getUuidAsString().equals(signal.ownerUUID)) return;
             if (privacy && !client.player.getUuidAsString().equals(signal.ownerUUID)) return;
             if (vantage && client.player.getUuidAsString().equals(signal.ownerUUID)) return;
             if (twisted && !signal.ownerUUID.equals("beacon")) return;

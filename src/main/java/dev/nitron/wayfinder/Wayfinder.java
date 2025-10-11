@@ -48,14 +48,13 @@ public class Wayfinder implements ModInitializer {
 			entries.addBefore(WayfinderItems.VANTAGE_LENS, WayfinderItems.CONCAVE_LENS);
 			entries.addBefore(WayfinderItems.CONCAVE_LENS, WayfinderItems.TWISTED_LENS);
 			entries.addBefore(WayfinderItems.TWISTED_LENS, WayfinderItems.SIGNALSCOPE);
+			entries.addBefore(Items.COMPASS, WayfinderItems.WAYFINDERS_COMPASS);
 		});
 
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.REDSTONE).register(entries -> {
 			entries.addBefore(Items.BELL, WayfinderBlocks.SIGNAL_ARRAY);
 			entries.addBefore(WayfinderBlocks.SIGNAL_ARRAY, WayfinderBlocks.SIGNAL_BEACON);
 		});
-
-
 	}
 
 	public static void grantAdvancement(PlayerEntity player, Identifier identifier, String criterion){

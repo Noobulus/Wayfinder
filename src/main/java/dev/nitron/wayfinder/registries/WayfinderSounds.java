@@ -17,6 +17,8 @@ public class WayfinderSounds {
     public static final SoundEvent SIGNALSCOPE = registerSound("signalscope");
     public static final SoundEvent TAKE_LENS = registerSound("take_lens");
     public static final SoundEvent PLACE_LENS = registerSound("place_lens");
+    public static final SoundEvent COMPASS_OPEN = registerSound("compass_open");
+    public static final SoundEvent COMPASS_CLOSE = registerSound("compass_close");
 
     private static SoundEvent registerSound(String id) {
         Identifier identifier = Identifier.of(Wayfinder.MOD_ID, id);

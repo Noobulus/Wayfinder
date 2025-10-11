@@ -41,5 +41,17 @@
       "wayfinder:place_lens"
     ],
     "subtitle": "sounds.wayfinder.place_lens"
+  },
+  "compass_open": {
+    "sounds": [
+      "wayfinder:compass_open"
+    ],
+    "subtitle": "sounds.wayfinder.compass_open"
+  },
+  "compass_close": {
+    "sounds": [
+      "wayfinder:compass_close"
+    ],
+    "subtitle": "sounds.wayfinder.compass_close"
   }
 }

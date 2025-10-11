@@ -1,5 +1,6 @@
 package dev.nitron.wayfinder.cca;
 
+import dev.nitron.wayfinder.Wayfinder;
 import dev.nitron.wayfinder.registries.WayfinderComponents;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -23,13 +24,15 @@ public class WayfinderWorldComponent implements AutoSyncedComponent, CommonTicki
         public Vec3i color;
         public int type;
         public String ownerUUID;
+        public boolean isPowered;
 
-        public SignalData(BlockPos pos, String name, Vec3i color, int type, String ownerUUID){
+        public SignalData(BlockPos pos, String name, Vec3i color, int type, String ownerUUID, boolean isPowered){
             this.pos = pos;
             this.name = name;
             this.color = color;
             this.type = type;
             this.ownerUUID = ownerUUID;
+            this.isPowered = isPowered;
         }
     }
 
@@ -52,18 +55,19 @@ public class WayfinderWorldComponent implements AutoSyncedComponent, CommonTicki
         sync();
     }
 
-    public void updateSignal(BlockPos pos, String name, Vec3i color, int type, String ownerUuid) {
+    public void updateSignal(BlockPos pos, String name, Vec3i color, int type, String ownerUuid, boolean powered) {;
         for (SignalData s : signalPositions) {
             if (s.pos.equals(pos)) {
                 s.name = name;
                 s.color = color;
                 s.type = type;
                 s.ownerUUID = ownerUuid;
+                s.isPowered = powered;
                 sync();
                 return;
             }
         }
-        signalPositions.add(new SignalData(pos, name, color, type, ownerUuid));
+        signalPositions.add(new SignalData(pos, name, color, type, ownerUuid, powered));
         sync();
     }
 
@@ -74,7 +78,6 @@ public class WayfinderWorldComponent implements AutoSyncedComponent, CommonTicki
 
     @Override
     public void tick() {
-
     }
 
     @Override
@@ -88,7 +91,8 @@ public class WayfinderWorldComponent implements AutoSyncedComponent, CommonTicki
             Vec3i color = new Vec3i(tag.getInt("red"), tag.getInt("green"), tag.getInt("blue"));
             int type = tag.getInt("type");
             String ownerUUID = tag.getString("ownerUUID");
-            signalPositions.add(new SignalData(pos, name, color, type, ownerUUID));
+            boolean powered = tag.getBoolean("powered");
+            signalPositions.add(new SignalData(pos, name, color, type, ownerUUID, powered));
         }
     }
 
@@ -106,6 +110,7 @@ public class WayfinderWorldComponent implements AutoSyncedComponent, CommonTicki
             tag.putInt("blue", data.color.getZ());
             tag.putInt("type", data.type);
             tag.putString("ownerUUID", data.ownerUUID);
+            tag.putBoolean("powered", data.isPowered);
             list.add(tag);
         }
         nbt.put("Signals", list);
