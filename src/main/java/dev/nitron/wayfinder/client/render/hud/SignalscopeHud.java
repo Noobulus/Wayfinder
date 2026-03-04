@@ -192,7 +192,7 @@ public class SignalscopeHud implements HudRenderCallback {
             a = Math.clamp(a, 0, 255);
             color = (a << 24) | (r << 16) | (g << 8) | b;
 
-            if (distance < (fadeEnd) - 5){ // add that 5 to keep the original intent of signals being visible slightly longer than the text
+            if (distance < fadeEnd){
                 drawContext.drawText(
                         client.textRenderer,
                         text,
