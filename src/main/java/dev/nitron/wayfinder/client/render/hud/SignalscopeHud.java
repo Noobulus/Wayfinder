@@ -2,8 +2,6 @@ package dev.nitron.wayfinder.client.render.hud;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.nitron.wayfinder.Wayfinder;
-import dev.nitron.wayfinder.block.SignalArrayBlock;
-import dev.nitron.wayfinder.block_entity.SignalArrayBlockEntity;
 import dev.nitron.wayfinder.cca.WayfinderWorldComponent;
 import dev.nitron.wayfinder.item.SignalscopeItem;
 import dev.nitron.wayfinder.registries.WayfinderComponents;
@@ -12,8 +10,6 @@ import dev.nitron.wayfinder.registries.WayfinderItems;
 import dev.nitron.wayfinder.util.SignalscopeHelper;
 import dev.nitron.wayfinder.util.ZoomHandler;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderTickCounter;
@@ -25,6 +21,14 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 
 public class SignalscopeHud implements HudRenderCallback {
+    float BASE_FADE_END = 4096F; // originally 1000
+    float CONCAVE_FADE_END = 8192F; // originally 3000
+    float TWISTED_FADE_END = 2048F; // originally 500
+
+    float BASE_FADE_START = BASE_FADE_END * 0.75F; // originally 900
+    float CONCAVE_FADE_START = CONCAVE_FADE_END * 0.75F; // originally 2900
+    float TWISTED_FADE_START = TWISTED_FADE_END * 0.75F; // originally 450
+
     @Override
     public void onHudRender(DrawContext drawContext, RenderTickCounter renderTickCounter) {
         MinecraftClient client = MinecraftClient.getInstance();
@@ -58,7 +62,7 @@ public class SignalscopeHud implements HudRenderCallback {
         boolean privacy = client.player.getActiveItem().get(WayfinderDataComponents.SIGNALSCOPE_COMPONENT_COMPONENT_TYPE).item().isOf(WayfinderItems.PRIVACY_LENS);
         boolean vantage = client.player.getActiveItem().get(WayfinderDataComponents.SIGNALSCOPE_COMPONENT_COMPONENT_TYPE).item().isOf(WayfinderItems.VANTAGE_LENS);
         boolean twisted = client.player.getActiveItem().get(WayfinderDataComponents.SIGNALSCOPE_COMPONENT_COMPONENT_TYPE).item().isOf(WayfinderItems.TWISTED_LENS);
-        BlockPos lookedAtSignal = SignalscopeHelper.getLookedAtSignal(client.player, comp.getSignalPositions(), 15.65F, concave ? 3000F : twisted ? 500F : 1000F, privacy, vantage, twisted);
+        BlockPos lookedAtSignal = SignalscopeHelper.getLookedAtSignal(client.player, comp.getSignalPositions(), 15.65F, getFadeEnd(concave, twisted), privacy, vantage, twisted);
 
         WayfinderWorldComponent.SignalData signal = comp.getSignalPositions().stream()
                 .filter(signalData -> signalData.pos.equals(lookedAtSignal))
@@ -98,8 +102,8 @@ public class SignalscopeHud implements HudRenderCallback {
             double distanceToSignal = client.player.getPos().distanceTo(Vec3d.ofCenter(signalPos));
 
             float fadeFactor = 1.0f;
-            float fadeStart = concave ? 2900F : twisted ? 450F : 900F;
-            float fadeEnd = concave ? 3000F : twisted ? 500F : 1000F;
+            float fadeStart = getFadeStart(concave, twisted);
+            float fadeEnd = getFadeEnd(concave, twisted);
 
             if (distanceToSignal > fadeStart) {
                 if (distanceToSignal >= fadeEnd) {
@@ -168,8 +172,8 @@ public class SignalscopeHud implements HudRenderCallback {
             if (!twisted && signal.ownerUUID.equals("beacon")) return;
 
             float fadeFactor = 1.0f;
-            float fadeStart = concave ? 2900F : twisted ? 450F : 900F;
-            float fadeEnd = concave ? 3000F : twisted ? 500F : 1000F;
+            float fadeStart = getFadeStart(concave, twisted);
+            float fadeEnd = getFadeEnd(concave, twisted);
 
             if (distance > fadeStart) {
                 if (distance >= fadeEnd) {
@@ -188,7 +192,7 @@ public class SignalscopeHud implements HudRenderCallback {
             a = Math.clamp(a, 0, 255);
             color = (a << 24) | (r << 16) | (g << 8) | b;
 
-            if (distance < (concave ? 2998 : twisted ? 498 : 998)){
+            if (distance < (fadeEnd) - 5){ // add that 5 to keep the original intent of signals being visible slightly longer than the text
                 drawContext.drawText(
                         client.textRenderer,
                         text,
@@ -196,5 +200,13 @@ public class SignalscopeHud implements HudRenderCallback {
                 );
             }
         }
+    }
+
+    private float getFadeStart(boolean concave, boolean twisted) {
+        return concave ? CONCAVE_FADE_START : twisted ? TWISTED_FADE_START : BASE_FADE_START;
+    }
+
+    private float getFadeEnd(boolean concave, boolean twisted) {
+        return concave ? CONCAVE_FADE_END : twisted ? TWISTED_FADE_END : BASE_FADE_END;
     }
 }
